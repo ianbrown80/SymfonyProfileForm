@@ -1,1 +1,9 @@
-Create
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="col-md-12">
+  <h2 class="page-header">Add User</h2>
+  {{ form_start(form) }}
+  {{ form_widget(form) }}
+  {{ form_end(form) }}
+</div>
+{% endblock %}
