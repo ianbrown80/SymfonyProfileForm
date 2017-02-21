@@ -13,10 +13,10 @@ class HobbyController extends Controller
      */
     public function usersAction()
     {
-        $users = $this->getDoctrine()
+      $users = $this->getDoctrine()
         ->getRepository('AppBundle:users')
         ->findAll();
-        return $this->render('AppBundle:Hobby:index.html.twig',
+      return $this->render('AppBundle:Hobby:index.html.twig',
         array('users' => $users));
     }
 
@@ -25,7 +25,11 @@ class HobbyController extends Controller
      */
     public function viewAction($id)
     {
-        return $this->render('AppBundle:Hobby:view.html.twig');
+      $user = $this->getDoctrine()
+        ->getRepository('AppBundle:users')
+        ->find($id);
+      return $this->render('AppBundle:Hobby:profile.html.twig',
+        array('user' => $user));
     }
 
     /**
