@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,6 +11,7 @@ class HobbyController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @Method({"POST", "GET"})
      */
     public function usersAction()
     {
@@ -22,6 +24,7 @@ class HobbyController extends Controller
 
     /**
      * @Route("/profile/{id}", name="profile")
+     * @Method({"POST", "GET"})
      */
     public function viewAction($id)
     {
@@ -50,9 +53,19 @@ class HobbyController extends Controller
 
     /**
      * @Route("/delete/{id}", name="delete")
+     * @Method({"GET", "POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {
-        return $this->render('AppBundle:Hobby:delete.html.twig');
+      $em = $this->getDoctrine()->getManager();
+      $user = $em->getRepository('AppBundle:users')
+        ->find($id);
+
+      $em->remove($user);
+      $em->flush();
+
+      $this->addFlash('notice', 'User Removed');
+
+      return $this->redirectToRoute('homepage');
     }
 }
