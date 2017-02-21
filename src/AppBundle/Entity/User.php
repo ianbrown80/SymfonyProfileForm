@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * users
+ * User
  *
- * @ORM\Table(name="users")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\usersRepository")
+ * @ORM\Table(name="User")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class users
+class User
 {
     /**
      * @var int
@@ -58,7 +58,7 @@ class users
      *
      * @param string $name
      *
-     * @return users
+     * @return user
      */
     public function setName($name)
     {
@@ -82,7 +82,7 @@ class users
      *
      * @param string $biography
      *
-     * @return users
+     * @return user
      */
     public function setBiography($biography)
     {
@@ -106,7 +106,7 @@ class users
      *
      * @param string $image
      *
-     * @return users
+     * @return user
      */
     public function setImage($image)
     {
