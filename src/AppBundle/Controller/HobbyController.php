@@ -13,7 +13,11 @@ class HobbyController extends Controller
      */
     public function usersAction()
     {
-        return $this->render('AppBundle:Hobby:index.html.twig');
+        $users = $this->getDoctrine()
+        ->getRepository('AppBundle:users')
+        ->findAll();
+        return $this->render('AppBundle:Hobby:index.html.twig',
+        array('users' => $users));
     }
 
     /**
