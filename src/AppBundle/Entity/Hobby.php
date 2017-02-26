@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * hobbies
+ * Hobby
  *
  * @ORM\Table(name="hobbies")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\hobbiesRepository")
  */
-class hobbies
+class Hobby
 {
     /**
      * @var int
@@ -42,6 +42,12 @@ class hobbies
      */
     private $date;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="hobbies")
+     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     */
+    private $user;
+
 
     /**
      * Get id
@@ -58,7 +64,7 @@ class hobbies
      *
      * @param integer $userID
      *
-     * @return hobbies
+     * @return Hobby
      */
     public function setUserID($userID)
     {
@@ -82,7 +88,7 @@ class hobbies
      *
      * @param string $hobby
      *
-     * @return hobbies
+     * @return Hobby
      */
     public function setHobby($hobby)
     {
@@ -106,7 +112,7 @@ class hobbies
      *
      * @param \DateTime $date
      *
-     * @return hobbies
+     * @return Hobby
      */
     public function setDate($date)
     {
@@ -124,4 +130,30 @@ class hobbies
     {
         return $this->date;
     }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Hobby
+     */
+    public function setUser(\AppBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+
 }

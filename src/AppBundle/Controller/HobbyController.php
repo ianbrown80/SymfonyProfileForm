@@ -7,9 +7,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Hobby;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Form\UserType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class HobbyController extends Controller
 {
@@ -48,12 +51,12 @@ class HobbyController extends Controller
     public function createAction(Request $request)
     {
       $user = new User;
-      $form = $this->createFormBuilder($user)
-        ->add('name', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('biography', CKEditorType::class, array('attr' => array('class' => 'form-control')))
-        ->add('image', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('save', SubmitType::class, array('label' => 'Add user', 'attr' => array('class' => 'btn btn-primary')))
-        ->getForm();
+      $hobbies = New Hobby();
+
+      $hobbies->setHobby("");
+      $user->getHobby()->add($hobbies);
+
+      $form = $this->createForm(UserType::class, $user);
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
@@ -62,9 +65,11 @@ class HobbyController extends Controller
 
         $user->setName($name);
         $user->setBiography($biography);
+        $hobbies->setUser($user);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
+        $em->persist($hobbies);
         $em->flush();
 
         $this->addFlash('notice', 'User added');
@@ -82,44 +87,50 @@ class HobbyController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+      $em = $this->getDoctrine()->getManager();
       $user = $this->getDoctrine()
         ->getRepository('AppBundle:User')
         ->find($id);
 
-        $user->setName($user->getName());
-        $user->setBiography($user->getBiography());
-        $user->setImage($user->getImage());
+      $user->setName($user->getName());
+      $user->setBiography($user->getBiography());
+      $user->setImage($user->getImage());
 
-        $form = $this->createFormBuilder($user)
-          ->add('name', TextType::class, array('attr' => array('class' => 'form-control')))
-          ->add('biography', CKEditorType::class, array('attr' => array('class' => 'form-control')))
-          ->add('image', TextType::class, array('attr' => array('class' => 'form-control')))
-          ->add('save', SubmitType::class, array('label' => 'Update user', 'attr' => array('class' => 'btn btn-primary')))
-          ->getForm();
-        $form->handleRequest($request);
+      $originalHobbies = new ArrayCollection();
+      foreach ($user->getHobby() as $hobby) {
+        $originalHobbies->add($hobby);
+      }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-          $name = $form['name']->getData();
-          $biography = $form['biography']->getData();
-          $image = $form['image']->getData();
+      $form = $this->createForm(UserType::class, $user);
+      $form->handleRequest($request);
 
-          $em = $this->getDoctrine()->getManager();
-          $user = $em->getRepository('AppBundle:User')
-            ->find($id);
+      if ($form->isSubmitted() && $form->isValid()) {
 
-          $user->setName($name);
-          $user->setBiography($biography);
-          $user->setImage($image);
+        foreach ($originalHobbies as $hobby) {
+          if (false === $user->getHobby()->contains($hobby)) {
 
-          $em->flush();
+            $user->removeHobby($hobby);
 
-          $this->addFlash('notice', 'User updated');
-
-          return $this->redirectToRoute('homepage');
+          }
         }
-        return $this->render('AppBundle:Hobby:update.html.twig',
-          array('form' => $form->createView())
-        );
+
+        $name = $form['name']->getData();
+        $biography = $form['biography']->getData();
+        $image = $form['image']->getData();
+
+        $user->setName($name);
+        $user->setBiography($biography);
+        $user->setImage($image);
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash('notice', 'User updated');
+
+        return $this->redirectToRoute('homepage');
+      }
+    return $this->render('AppBundle:Hobby:update.html.twig',
+        array('form' => $form->createView())
+      );
     }
 
     /**
@@ -129,8 +140,12 @@ class HobbyController extends Controller
     public function deleteAction(Request $request, $id)
     {
       $em = $this->getDoctrine()->getManager();
-      $user = $em->getRepository('AppBundle:user')
+      $user = $em->getRepository('AppBundle:User')
         ->find($id);
+
+      foreach ($user->getHobby() as $hobby) {
+        $user->removeHobby($hobby);
+      }
 
       $em->remove($user);
       $em->flush();

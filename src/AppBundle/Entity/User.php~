@@ -128,7 +128,7 @@ class User
     }
 
     /**
-     * @ORM\OneToMany(targetEntity="Hobby", mappedBy="user", cascade={"persist",  "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Hobby", mappedBy="user")
      */
     private $hobbies;
 
@@ -143,7 +143,7 @@ class User
      *
      * @return string
      */
-    public function getHobby()
+    public function getHobbies()
     {
         return $this->hobbies;
     }
@@ -155,23 +155,21 @@ class User
      *
      * @return user
      */
-    public function setHobby($hobby)
+    public function setHobbies($hobbies)
     {
-        $this->hobbies = $hobby;
+        $this->hobbies = $hobbies;
 
         return $this;
     }
 
     public function addHobby(Hobby $hobby)
     {
-        $hobby->setUser($this);
         $this->hobbies->add($hobby);
     }
 
     public function removeHobby(Hobby $hobby)
     {
         $this->hobbies->removeElement($hobby);
-        $hobby->setUser(null);
     }
 
 }
