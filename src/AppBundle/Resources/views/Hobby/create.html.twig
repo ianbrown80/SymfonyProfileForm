@@ -2,6 +2,7 @@
 {% block body %}
 <div class="col-md-12">
   <h2 class="page-header">Add User</h2>
+  
   {{ form_start(form) }}
   {{ form_row(form.name) }}
   {{ form_row(form.biography) }}
@@ -9,7 +10,7 @@
   <ul class="hobbies" data-prototype="{{ form_widget(form.hobby.vars.prototype)|e('html_attr') }}">
     {% for hobby in form.hobby %}
       <li>{{ form_row(hobby.hobby) }}{{ form_row(hobby.date) }}</li>
-      
+
     {% endfor %}
   </ul>
 

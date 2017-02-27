@@ -6,12 +6,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Hobby;
 use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use AppBundle\Form\UserType;
+use AppBundle\Form\CreateUserType;
+use AppBundle\Form\UpdateUserType;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class HobbyController extends Controller
@@ -56,15 +59,24 @@ class HobbyController extends Controller
       $hobbies->setHobby("");
       $user->getHobby()->add($hobbies);
 
-      $form = $this->createForm(UserType::class, $user);
+      $form = $this->createForm(CreateUserType::class, $user);
       $form->handleRequest($request);
 
       if ($form->isSubmitted() && $form->isValid()) {
         $name = $form['name']->getData();
         $biography = $form['biography']->getData();
+        $image = $user->getImage();
+
+        $fileName = md5(uniqid()).'.'.$image->guessExtension();
+
+        $image->move(
+          $this->getParameter('images_directory'),
+          $fileName
+        );
 
         $user->setName($name);
         $user->setBiography($biography);
+        $user->setImage($fileName);
         $hobbies->setUser($user);
 
         $em = $this->getDoctrine()->getManager();
@@ -92,19 +104,24 @@ class HobbyController extends Controller
         ->getRepository('AppBundle:User')
         ->find($id);
 
-      $user->setName($user->getName());
-      $user->setBiography($user->getBiography());
-      $user->setImage($user->getImage());
+      $originalImage = $user->getImage();
+      $originalImagePath = $this->getParameter('images_directory').'/'.$originalImage;
 
       $originalHobbies = new ArrayCollection();
       foreach ($user->getHobby() as $hobby) {
         $originalHobbies->add($hobby);
       }
 
-      $form = $this->createForm(UserType::class, $user);
+      $user->setName($user->getName());
+      $user->setBiography($user->getBiography());
+      $user->setImage(
+        new File($this->getParameter('images_directory').'/'.$user->getImage())
+      );
+
+      $form = $this->createForm(UpdateUserType::class, $user);
       $form->handleRequest($request);
 
-      if ($form->isSubmitted() && $form->isValid()) {
+      if ($form->isSubmitted()) {
 
         foreach ($originalHobbies as $hobby) {
           if (false === $user->getHobby()->contains($hobby)) {
@@ -116,11 +133,25 @@ class HobbyController extends Controller
 
         $name = $form['name']->getData();
         $biography = $form['biography']->getData();
-        $image = $form['image']->getData();
+
+        if ($user->getImage() != null) {
+          $image = $user->getImage();
+          $fileName = md5(uniqid()).'.'.$image->guessExtension();
+          $image->move(
+            $this->getParameter('images_directory'),
+            $fileName
+          );
+          $user->setImage($fileName);
+          if (file_exists($originalImagePath)) {
+            unlink($originalImagePath);
+          }
+        } else {
+          $user->setImage($originalImage);
+        }
 
         $user->setName($name);
         $user->setBiography($biography);
-        $user->setImage($image);
+
         $em->persist($user);
         $em->flush();
 
@@ -145,6 +176,10 @@ class HobbyController extends Controller
 
       foreach ($user->getHobby() as $hobby) {
         $user->removeHobby($hobby);
+      }
+      $image = $this->getParameter('images_directory').'/'.$user->getImage();
+      if (file_exists($image)) {
+        unlink($image);
       }
 
       $em->remove($user);

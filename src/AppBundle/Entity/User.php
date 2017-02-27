@@ -4,6 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * User
@@ -40,8 +42,10 @@ class User
 
     /**
      * @var string
+     * @ORM\Column(type="string")
      *
-     * @ORM\Column(name="image", type="string", length=255)
+     * @Assert\NotBlank(message="Please, upload your profile picture.")
+     * @Assert\Image()
      */
     private $image;
 
