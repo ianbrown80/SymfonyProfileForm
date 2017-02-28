@@ -2,20 +2,25 @@
 {% block body %}
 <div class="col-md-12">
   <h2 class="page-header">Add User</h2>
-  
   {{ form_start(form) }}
-  {{ form_row(form.name) }}
-  {{ form_row(form.biography) }}
-  {{ form_row(form.image) }}
-  <ul class="hobbies" data-prototype="{{ form_widget(form.hobby.vars.prototype)|e('html_attr') }}">
-    {% for hobby in form.hobby %}
-      <li>{{ form_row(hobby.hobby) }}{{ form_row(hobby.date) }}</li>
-
-    {% endfor %}
-  </ul>
-
+  <div class="row">
+    <div class="col-md-4">
+      <img src="img/profile-placeholder.jpg"/>
+      {{ form_row(form.image) }}
+      {{ form_row(form.name) }}
+    </div>
+    <div class="col-md-8">
+      {{ form_row(form.biography) }}
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <ul class="hobbies" data-prototype="{{ form_widget(form.hobby.vars.prototype)|e('html_attr') }}">
+      {% for hobby in form.hobby %}
+        <li>{{ form_row(hobby.hobby) }}{{ form_row(hobby.date) }}</li>
+      {% endfor %}
+    </ul>
+  </div>
   {{ form_end(form) }}
-
-
 </div>
 {% endblock %}

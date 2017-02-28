@@ -11,10 +11,10 @@
 
     <title>{% block title %}Welcome{% endblock %}</title>
 
-    <!-- Bootstrap core CSS -->
+    {% block stylesheets %}
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-    {% block stylesheets %}{% endblock %}
+    <link href="{{ asset('styles/styles.css') }}" rel="stylesheet">
+    {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
   </head>
@@ -34,7 +34,6 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
             <li><a href="/create">Add User</a></li>
           </ul>
         </div><!--/.nav-collapse -->

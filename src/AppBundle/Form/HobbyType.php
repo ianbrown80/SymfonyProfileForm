@@ -12,8 +12,8 @@ class HobbyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('hobby', TextType::class, array('attr' => array('class' => 'form-control')));
-        $builder->add('date', DateType::class, array('attr' => array('class' => 'form-control')));
+        $builder->add('hobby', TextType::class, array('attr' => array('class' => 'form-control hobby-input')));
+        $builder->add('date', DateType::class, array('attr' => array('class' => 'form-control hobby-input')));
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -28,7 +28,7 @@ function addHobbyForm($collectionHolder, $newLinkLi) {
 }
 
 function addHobbyFormDeleteLink($hobbyFormLi) {
-    var $removeFormA = $('<a class="btn btn-danger" href="#">delete this hobby</a>');
+    var $removeFormA = $('<a class="btn btn-danger delete" href="#">Delete this hobby</a>');
     $hobbyFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

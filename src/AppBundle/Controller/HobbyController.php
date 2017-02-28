@@ -160,7 +160,7 @@ class HobbyController extends Controller
         return $this->redirectToRoute('homepage');
       }
     return $this->render('AppBundle:Hobby:update.html.twig',
-        array('form' => $form->createView())
+        array('form' => $form->createView(), 'image' => $originalImage)
       );
     }
 
