@@ -5,7 +5,9 @@
   {{ form_start(form) }}
   <div class="row">
     <div class="col-md-4">
-      <img src="img/profile-placeholder.jpg"/>
+      <div class="profile_image_container">
+        <img class="profile_image" src="img/profile-placeholder.jpg"/>
+      </div>
       {{ form_row(form.image) }}
       {{ form_row(form.name) }}
     </div>

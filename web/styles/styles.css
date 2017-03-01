@@ -32,3 +32,15 @@ td, th {
 .table_image {
   width: 50px;
 }
+
+.profile_image_container {
+  width: 100%;
+}
+
+.profile_image {
+  width: 100%;
+}
+
+.is-dragover {
+  opacity: 0.1;
+}

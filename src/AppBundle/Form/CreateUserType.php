@@ -16,7 +16,7 @@ class CreateUserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', TextType::class, array('attr' => array('class' => 'form-control')));
-        $builder->add('biography', CKEditorType::class, array('attr' => array('class' => 'form-control')));
+        $builder->add('biography', CKEditorType::class, array('attr' => array('class' => 'form-control', 'id' => 'biography')));
         $builder->add('image', FileType::class);
         $builder->add('save', SubmitType::class, array('label' => 'Add user', 'attr' => array('class' => 'submit btn btn-primary')));
         $builder->add('hobby', CollectionType::class, array(

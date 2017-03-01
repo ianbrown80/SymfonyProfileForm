@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use AppBundle\Entity\User;
@@ -59,10 +60,19 @@ class HobbyController extends Controller
       $hobbies->setHobby("");
       $user->getHobby()->add($hobbies);
 
-      $form = $this->createForm(CreateUserType::class, $user);
+      $form = $this->createForm(CreateUserType::class, $user,
+        array(
+          'method' => 'POST',
+          'action' => $this->generateUrl('create'),
+          'attr' => array(
+            'class' => 'form'
+          )
+        )
+      );
       $form->handleRequest($request);
 
-      if ($form->isSubmitted() && $form->isValid()) {
+      if ($form->isSubmitted()) {
+        
         $name = $form['name']->getData();
         $biography = $form['biography']->getData();
         $image = $user->getImage();
@@ -86,7 +96,7 @@ class HobbyController extends Controller
 
         $this->addFlash('notice', 'User added');
 
-        return $this->redirectToRoute('homepage');
+        return new Response();
 
       }
       return $this->render('AppBundle:Hobby:create.html.twig',
@@ -118,7 +128,18 @@ class HobbyController extends Controller
         new File($this->getParameter('images_directory').'/'.$user->getImage())
       );
 
-      $form = $this->createForm(UpdateUserType::class, $user);
+      $form = $this->createForm(UpdateUserType::class, $user,
+        array(
+          'method' => 'POST',
+          'action' => $this->generateUrl('update',
+            array(
+              'id' => $id
+            )
+          ), 'attr' => array(
+            'class' => 'form'
+          ),
+        )
+      );
       $form->handleRequest($request);
 
       if ($form->isSubmitted()) {
@@ -157,7 +178,7 @@ class HobbyController extends Controller
 
         $this->addFlash('notice', 'User updated');
 
-        return $this->redirectToRoute('homepage');
+        return new Response();
       }
     return $this->render('AppBundle:Hobby:update.html.twig',
         array('form' => $form->createView(), 'image' => $originalImage)
