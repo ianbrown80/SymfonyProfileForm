@@ -11,6 +11,17 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
+/* Build a form for updating a user. The differences between this form
+ * and the create user form are only that the image file isn't required
+ * as there is already an image stored, and the name of the submit button.
+ * In hindsight the required attribute could have been changed in javascript
+ * and the submit button could have been rendered seperate to the form.
+ */
+
+/* The form integrates the seperate hobby form which can be duplicated to
+ * add more hobbies.
+ */
+
 class UpdateUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -6,6 +6,7 @@
   <div class="row">
     <div class="col-md-4">
       <div class="profile_image_container">
+        <p class="upload_text">Drag an image over this image or use the button below to upload an image.</p>
         <img class="profile_image" src="/img/{{ image }}" />
       </div>
       {{ form_row(form.image) }}
@@ -19,10 +20,11 @@
   <div class="row">
     <ul class="hobbies" data-prototype="{{ form_widget(form.hobby.vars.prototype)|e('html_attr') }}">
       {% for hobby in form.hobby %}
-        <li>{{ form_row(hobby.hobby) }}{{ form_row(hobby.date) }}</li>
+        <li class="col-md-3">{{ form_row(hobby.hobby) }}{{ form_row(hobby.date) }}</li>
       {% endfor %}
     </ul>
   </div>
   {{ form_end(form) }}
+  <div class="alert alert-danger message"></div>
 </div>
 {% endblock %}

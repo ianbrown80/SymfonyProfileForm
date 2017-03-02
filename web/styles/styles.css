@@ -3,25 +3,24 @@ input {
   padding-bottom: 0;
 }
 
+td, th {
+  height: 50px;
+  text-align: center;
+  vertical-align: middle !important;
+}
+
 .hobbies {
   list-style: none;
 }
 
 .hobbies li {
   float: left;
-  width: 25%;
   padding: 10px;
 }
 
 .submit {
   width: 100%;
   margin: 20px;
-}
-
-td, th {
-  height: 50px;
-  text-align: center;
-  vertical-align: middle !important;
 }
 
 .delete, .add_hobby_link {
@@ -43,4 +42,26 @@ td, th {
 
 .is-dragover {
   opacity: 0.1;
+}
+
+.upload_text {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  opacity: 0.5;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 0 25%;
+}
+
+.message {
+  visibility: hidden;
+}
+.message.show {
+  visibility: visible;
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
 }

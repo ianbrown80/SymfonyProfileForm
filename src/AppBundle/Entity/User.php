@@ -131,7 +131,10 @@ class User
         return $this->image;
     }
 
-    /**
+
+
+    /** Link the users and hobbies together in the database.
+     *
      * @ORM\OneToMany(targetEntity="Hobby", mappedBy="user", cascade={"persist",  "remove"}, orphanRemoval=true)
      */
     private $hobbies;
@@ -166,12 +169,24 @@ class User
         return $this;
     }
 
+    /**
+     * Add hobby to a user
+     *
+     * @param Hobby $hobby
+     *
+     */
     public function addHobby(Hobby $hobby)
     {
         $hobby->setUser($this);
         $this->hobbies->add($hobby);
     }
 
+    /**
+     * Remove a hobby from a user.
+     *
+     * @param Hobby $hobby
+     *
+     */
     public function removeHobby(Hobby $hobby)
     {
         $this->hobbies->removeElement($hobby);

@@ -43,6 +43,7 @@ class Hobby
     private $date;
 
     /**
+     * Link the hobbies and users together in the database
      * @ORM\ManyToOne(targetEntity="User", inversedBy="hobbies")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
@@ -131,7 +132,8 @@ class Hobby
         return $this->date;
     }
 
-    /**
+    /* User methods link a user to to a hobby
+    /*
      * Set user
      *
      * @param \AppBundle\Entity\User $user
